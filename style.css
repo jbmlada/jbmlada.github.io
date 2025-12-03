@@ -1,167 +1,188 @@
-/* GLOBAL STYLES & FONT */
-:root {
-    --text-color: #000;
-    --bg-color: #fff;
-    --font-size: 14px; /* Base font size */
-    --max-width: 900px;
-    --padding-x: 20px;
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-    background: var(--bg-color);
-    color: var(--text-color);
-    /* The key: Use a classic monospace font */
-    font-family: 'Courier New', Courier, monospace;
-    font-size: var(--font-size);
-    line-height: 1.4;
-    padding: 0;
-    margin: 0;
-    -webkit-font-smoothing: antialiased;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #ffffff;
+    color: #333;
+    overflow: hidden; /* Hide main body scroll, we handle it in JS/Container */
+    height: 100vh;
+    width: 100vw;
+}
+
+/* Typography */
+h1 {
+    font-size: 2rem;
+    font-weight: 400;
+    color: #555;
+}
+
+h2 {
+    font-size: 2.5rem;
+    font-weight: 400;
+    color: #555;
+    margin-top: 0.5rem;
+    transition: opacity 0.3s ease;
 }
 
 a {
-    color: var(--text-color);
     text-decoration: none;
+    color: #888;
+    font-size: 1rem;
+    display: block;
+    margin-bottom: 0.5rem;
+    transition: color 0.2s;
 }
 
 a:hover {
-    text-decoration: underline;
+    color: #333;
 }
 
-/* HEADER STYLES (Fixed to the top) */
-.header {
+/* Fixed Header Layout */
+header {
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
+    width: 100%;
+    padding: 3rem 4rem;
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    max-width: var(--max-width);
-    margin: 0 auto;
-    padding: 20px var(--padding-x);
-    background-color: var(--bg-color);
+    align-items: flex-start;
     z-index: 10;
-    border-bottom: 1px solid var(--text-color); /* Separator line */
+    pointer-events: none; /* Let clicks pass through empty space */
 }
 
-.site-title {
-    font-weight: bold;
+/* Re-enable clicks on the actual text */
+.brand, nav {
+    pointer-events: auto;
 }
 
-.nav-item {
-    margin-left: 20px;
-}
-
-/* MAIN PROJECT LIST LAYOUT */
-.project-list {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    padding: 80px var(--padding-x) 40px; /* Add padding for the fixed header */
-    padding-top: 100px; /* Ensure content starts below the fixed header */
-}
-
-.project-item {
-    display: grid;
-    /* Define the columns:
-       1. Title/Company (flexible width, project name is longest)
-       2. Role (fixed width)
-       3. Year (fixed width)
-       4. Collaborator Count (small fixed width)
-    */
-    grid-template-columns: minmax(150px, 1fr) 150px 70px 30px; 
-    
-    gap: 10px;
-    border-bottom: 1px solid var(--text-color);
-    padding: 10px 0;
-    margin-bottom: 0;
-}
-
-.project-item:last-of-type {
-    border-bottom: none;
-}
-
-/* Custom layout for different elements in the grid */
-.item-title {
-    font-weight: bold;
-}
-
-/* Span the first three columns for Company/Acquisition line */
-.item-company {
-    grid-column: 1 / span 3; 
-    font-style: italic;
-    padding-bottom: 5px; /* Spacing before collaborators */
-}
-
-/* The role and year are simple grid items */
-
-/* Collaborators list spans across all columns to mimic the full-width flow */
-.item-collaborators {
-    grid-column: 1 / -1; /* Start at column 1, end before the last column's end line (span all) */
-    font-size: 0.85em;
-    color: #555; /* Slightly lighter text for collaborators */
-    padding-bottom: 10px;
-}
-
-.item-count {
+nav ul {
+    list-style: none;
     text-align: right;
-    font-weight: bold;
 }
 
-/* Responsive adjustments for smaller screens */
-@media (max-width: 650px) {
-    .header {
-        flex-direction: column;
-        align-items: flex-start;
-        padding-bottom: 10px;
-    }
-
-    nav {
-        margin-top: 10px;
-    }
-    
-    .nav-item {
-        margin-left: 0;
-        margin-right: 15px;
-    }
-
-    .project-list {
-        padding-top: 140px; /* Adjust for taller header */
-    }
-
-    /* Collapse the main project list to a simpler stacked layout */
-    .project-item {
-        display: block; /* Switch to block layout */
-        grid-template-columns: none;
-        padding: 15px 0;
-    }
-    
-    .item-title {
-        display: block;
-        margin-bottom: 5px;
-        font-size: 1.1em;
-    }
-
-    .item-company {
-        grid-column: auto;
-    }
+/* Carousel Container */
+#carousel-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    overflow-x: scroll;
+    /* Hide scrollbar */
+    scrollbar-width: none; 
+    -ms-overflow-style: none;
+    scroll-behavior: smooth;
 }
 
-
-/* ABOUT SECTION STYLES */
-.about-section {
-    max-width: var(--max-width);
-    margin: 40px auto;
-    padding: 40px var(--padding-x);
-    border-top: 1px solid var(--text-color);
+#carousel-container::-webkit-scrollbar { 
+    display: none; 
 }
 
-.about-section h2 {
-    font-size: 1.5em;
-    font-weight: bold;
-    margin-top: 0;
+.carousel-track {
+    display: flex;
+    padding-left: 20vw; /* Start with offset */
+    gap: 10vw;
+    align-items: center;
 }
 
-.contact-links a {
-    text-decoration: underline;
+/* Project Cards */
+.project-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.image-box {
+    width: 50vw; /* Adjust width based on preference */
+    height: 60vh;
+    border: 2px dotted #aaa; /* The dotted look */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    overflow: hidden;
+    background: #fff;
+    transition: transform 0.3s ease;
+}
+
+.image-box:hover {
+    transform: scale(1.02);
+    border-style: solid; /* Optional: solidify border on hover */
+}
+
+.image-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.project-title {
+    color: #ff0000; /* Red as requested in sketch for indicators, or switch to #333 */
+    color: #333; 
+    font-size: 1.2rem;
+}
+
+.spacer {
+    min-width: 20vw;
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(15px); /* The Blur Effect */
+    -webkit-backdrop-filter: blur(15px);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modal-content {
+    background: white;
+    padding: 2rem;
+    max-width: 800px;
+    width: 90%;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+/* About Grid */
+.about-grid, .project-detail-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+.about-grid img, .project-detail-layout img {
+    width: 100%;
+    height: auto;
 }

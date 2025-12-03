@@ -3,88 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mike Matas - Design Portfolio</title>
+    <title>Juan Lada | Portfolio</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <header class="header">
-        <div class="site-title">Mike Matas</div>
+    <header>
+        <div class="brand">
+            <h1>Juan Lada</h1>
+            <h2 id="year-display">2025</h2>
+        </div>
+        
         <nav>
-            <span class="nav-item">2025</span>
-            <a href="#about" class="nav-item">About</a>
-            <a href="https://twitter.com/mikematas" target="_blank" class="nav-item">Twitter</a>
-            <a href="https://www.instagram.com/mikematas/" target="_blank" class="nav-item">Instagram</a>
+            <ul>
+                <li><a href="#" id="about-btn">About</a></li>
+                <li><a href="https://linkedin.com/in/yourprofile" target="_blank">Linkedin</a></li> 
+                <li><a href="path/to/resume.pdf" download>Resume</a></li> 
+            </ul>
         </nav>
     </header>
 
-    <main class="project-list">
+    <main id="carousel-container">
+        <div class="carousel-track">
+            
+            <article class="project-card" data-year="2025">
+                <div class="image-box" onclick="openProject(this)" 
+                     data-title="Project One" 
+                     data-desc="This is the description for Project One. It was a branding exercise focusing on minimalism."
+                     data-img="https://via.placeholder.com/600x400/f0f0f0/cccccc?text=Project+1">
+                    <img src="https://via.placeholder.com/600x400/f0f0f0/cccccc?text=Project+1" alt="Project 1">
+                </div>
+                <p class="project-title">Project 1</p>
+            </article>
 
-        <section class="project-item">
-            <div class="item-title">Lobe</div>
-            <div class="item-role">Founder</div>
-            <div class="item-company">Acquired by Microsoft</div>
-            <div class="item-year">2020</div>
-            <div class="item-count">0</div>
-            <div class="item-collaborators">Kevin Scott, Bill Barnes, Jake Cohen, Adam Menges, Markus Beissinger, Zach Stiggelbout, Ramon Gilabert, Mike Matas</div>
-        </section>
+            <article class="project-card" data-year="2024">
+                <div class="image-box" onclick="openProject(this)" 
+                     data-title="Project Two" 
+                     data-desc="Project Two involved complex UI/UX research and wireframing for a fintech app."
+                     data-img="https://via.placeholder.com/600x400/f0f0f0/cccccc?text=Project+2">
+                    <img src="https://via.placeholder.com/600x400/f0f0f0/cccccc?text=Project+2" alt="Project 2">
+                </div>
+                <p class="project-title">Project 2</p>
+            </article>
 
-        <section class="project-item">
-            <div class="item-title">Instant Articles</div>
-            <div class="item-role">Interface Design</div>
-            <div class="item-company">Facebook</div>
-            <div class="item-year">2015</div>
-            <div class="item-count">0</div>
-            <div class="item-collaborators">Mark Zuckerberg, Chris Cox, Michael Reckhow, Ben Langholz, Sharon Matas, Mike Matas</div>
-        </section>
+            <article class="project-card" data-year="2023">
+                <div class="image-box" onclick="openProject(this)" 
+                     data-title="Project Three" 
+                     data-desc="A photography collection shot in Tokyo during the spring season."
+                     data-img="https://via.placeholder.com/600x400/f0f0f0/cccccc?text=Project+3">
+                    <img src="https://via.placeholder.com/600x400/f0f0f0/cccccc?text=Project+3" alt="Project 3">
+                </div>
+                <p class="project-title">Project 3</p>
+            </article>
 
-        <section class="project-item">
-            <div class="item-title">Nest</div>
-            <div class="item-role">Interface Design</div>
-            <div class="item-company">Acquired by Google</div>
-            <div class="item-year">2014</div>
-            <div class="item-count">0</div>
-            <div class="item-collaborators">Tony Fadell, David Sloo, Fred Bould, Tom Crabtree, Mike Matas</div>
-        </section>
-
-        <section class="project-item">
-            <div class="item-title">Push Pop Press</div>
-            <div class="item-role">Founder</div>
-            <div class="item-company">Acquired by Facebook</div>
-            <div class="item-year">2011</div>
-            <div class="item-count">0</div>
-            <div class="item-collaborators">Al Gore, Charlie Melcher, Duncan Bock, Kimon Tsinteris, Austin Sarner, Bret Victor, Mike Matas</div>
-        </section>
-
-        <section class="project-item">
-            <div class="item-title">iPad Photos</div>
-            <div class="item-role">Interface Design</div>
-            <div class="item-company">Apple</div>
-            <div class="item-year">2010</div>
-            <div class="item-count">0</div>
-            <div class="item-collaborators">Steve Jobs, Scott Forstall, Greg Christie, Bas Ording, Imran Chaudhri, Steve Lemay, Marcell Van Os, Freddy Anzures, Mike Matas</div>
-        </section>
-
-        <section class="project-item">
-            <div class="item-title">Delicious Library</div>
-            <div class="item-role">Founder</div>
-            <div class="item-company">Delicious Monster</div>
-            <div class="item-year">2004</div>
-            <div class="item-count">0</div>
-            <div class="item-collaborators">Wil Shipley, Tim Omernick, Drew Hamlin, Scott Maier, Jeff Rooney, Mike Matas</div>
-        </section>
-        
+            <div class="spacer"></div>
+        </div>
     </main>
 
-    <section id="about" class="about-section">
-        <h2>About</h2>
-        <p>Mike Matas is an entrepreneur and interface designer based in Healdsburg, California. His work can be seen in products from Apple, Nest, Facebook, Microsoft, and his startups Delicious Library, Push Pop Press and Lobe. He is currently working on some new projects with LoveFrom. Outside of design, Mike is a passionate photographer, gardener, husband and dad.</p>
-        <p class="contact-links">
-            <a href="mailto:you@example.com">Email</a> / 
-            <a href="https://twitter.com/your_twitter" target="_blank">Twitter</a> / 
-            <a href="https://www.instagram.com/your_instagram/" target="_blank">Instagram</a>
-        </p>
-    </section>
+    <div id="about-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div class="about-grid">
+                <img src="https://via.placeholder.com/300x400/333/fff?text=Me" alt="Portrait of Juan">
+                <div>
+                    <h3>About Me</h3>
+                    <p>Hello, I'm Juan Lada. I am a multidisciplinary designer based in Manila. I focus on creating clean, functional digital experiences.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="project-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div class="project-detail-layout">
+                <img id="modal-img" src="" alt="">
+                <div>
+                    <h3 id="modal-title"></h3>
+                    <p id="modal-desc"></p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
