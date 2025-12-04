@@ -235,48 +235,51 @@ nav ul {
     height: 1.5rem; 
     position: relative;
     cursor: pointer;
-    /* Reset link styles */
     font-size: 1rem;
-    margin: 0 0 0.5rem 0.5rem; /* Maintain vertical alignment with Resume text */
+    /* Adjust margin to align icon vertically with 'Resume' text */
+    margin: 0 0 0.5rem 0.5rem; 
 }
 
 .download-icon::before {
-    /* Arrowhead */
+    /* Arrowhead and stem combined via border/shadow */
     content: "";
     position: absolute;
-    top: 0.3rem;
+    top: 0.1rem; 
     left: 50%;
     transform: translateX(-50%);
-    border: 0.35rem solid transparent;
-    border-top: 0.35rem solid #888; /* Arrow tip */
-    transition: border-top-color 0.2s;
+    
+    /* Arrowhead (Triangle) */
+    border: 0.3rem solid transparent; 
+    border-top: 0.3rem solid #888; 
+    
+    /* Stem (using box-shadow for the downward line) */
+    box-shadow: 0 0.4rem 0 0 #888, /* First line segment */
+                0 0.6rem 0 0 #888; /* Second line segment (for thickness) */
+    
+    transition: border-top-color 0.2s, box-shadow 0.2s;
 }
 
 .download-icon::after {
-    /* Arrow stem and base line */
+    /* Horizontal base line */
     content: "";
     position: absolute;
-    top: 0.2rem;
+    bottom: 0.3rem; 
     left: 50%;
-    width: 0.1rem;
-    height: 0.7rem;
-    background-color: #888;
     transform: translateX(-50%);
-    
-    /* Horizontal base line via box-shadow */
-    box-shadow: 0 1.05rem 0 0 #888; 
-    transition: background-color 0.2s, box-shadow 0.2s;
+    width: 1.1rem; /* Wider base line */
+    height: 0.1rem;
+    background-color: #888;
+    transition: background-color 0.2s;
 }
 
+/* Hover styles */
 .download-icon:hover::before {
     border-top-color: #333;
+    box-shadow: 0 0.4rem 0 0 #333, 0 0.6rem 0 0 #333;
 }
-
 .download-icon:hover::after {
     background-color: #333;
-    box-shadow: 0 1.05rem 0 0 #333;
 }
-
 
 /* --- Mobile/Tablet Responsiveness (Max width 768px) --- */
 @media (max-width: 768px) {
