@@ -186,3 +186,16 @@ nav ul {
     width: 100%;
     height: auto;
 }
+
+/* Custom Widths for Specific Projects */
+
+/* Make the 'wide-item' box 45vw wide */
+.project-card.wide-item .image-box {
+    width: 60vw; 
+    /* You might also want to adjust the height here */
+}
+
+/* Make the 'narrow-item' box 20vw wide */
+.project-card.narrow-item .image-box {
+    width: 20vw;
+}
