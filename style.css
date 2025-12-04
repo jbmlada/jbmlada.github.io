@@ -199,3 +199,70 @@ nav ul {
 .project-card.narrow-item .image-box {
     width: 20vw;
 }
+
+
+/* --- Mobile/Tablet Responsiveness (Max width 768px) --- */
+@media (max-width: 768px) {
+    /* 1. General Layout Fixes */
+    body {
+        overflow-y: scroll; /* Allow standard vertical scrolling */
+        overflow-x: hidden;
+        height: auto;
+    }
+
+    /* 2. Header Fixes: Stack the elements */
+    header {
+        padding: 2rem 1.5rem;
+        flex-direction: column;
+        align-items: center;
+    }
+    nav ul {
+        text-align: center;
+    }
+    nav li {
+        display: inline-block;
+        margin: 0 0.5rem;
+    }
+    a {
+        font-size: 1rem; /* Shrink link text */
+    }
+
+    /* 3. Carousel Fixes: Switch to Vertical Stacking */
+    #carousel-container {
+        position: static; /* Remove absolute positioning */
+        height: auto;
+        overflow-x: hidden; /* Disable horizontal scrolling */
+        display: block;
+    }
+    
+    .carousel-track {
+        flex-direction: column; /* Stack items vertically */
+        padding-left: 0 !important; /* Remove centering offset */
+        gap: 5vh; /* Vertical spacing */
+    }
+
+    /* 4. Project Card Fixes: Full width on mobile */
+    .project-card {
+        width: 100%;
+        align-items: center;
+        margin-bottom: 2rem; /* Add extra spacing at the bottom */
+    }
+    
+    .image-box {
+        /* Use !important to override the custom 'wide-item' and 'narrow-item' desktop widths */
+        width: 90vw !important; 
+        height: 40vh !important; 
+        margin: 0 auto;
+    }
+
+    /* 5. Remove the spacer at the end */
+    .spacer {
+        display: none;
+    }
+    
+    /* 6. Modal Layout Fix: Stack image and text for better viewing */
+    .about-grid, .project-detail-layout {
+        grid-template-columns: 1fr; /* Single column */
+        gap: 1rem;
+    }
+}

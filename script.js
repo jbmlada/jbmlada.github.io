@@ -1,20 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // --- 1. Horizontal Scroll via Mouse Wheel ---
-	const container = document.getElementById('carousel-container');
+// --- 1. Horizontal Scroll via Mouse Wheel ---
+const container = document.getElementById('carousel-container');
 
-   	 container.addEventListener('wheel', (evt) => {
-        evt.preventDefault();
-        
-        // Adjust this number to control speed 
-        // (Higher = Faster. Try 5, 8, or 10)
-        const scrollSpeed = 20; 
+container.addEventListener('wheel', (evt) => {
+    evt.preventDefault();
+    
+    // Keeping scrollSpeed high (20) for rapid movement
+    const scrollSpeed = 20; 
 
-        container.scrollBy({
-            left: evt.deltaY * scrollSpeed,
-            behavior: 'auto' // CHANGED: 'auto' makes it feel instant and responsive
-        });
+    container.scrollBy({
+        left: evt.deltaY * scrollSpeed,
+        // CHANGED: 'smooth' reintroduces the continuous animation 
+        // needed for a good trackpad feel.
+        behavior: 'smooth' 
     });
+});
     // --- 2. Timeline "Year" Update Logic ---
     const yearDisplay = document.getElementById('year-display');
     const cards = document.querySelectorAll('.project-card');
