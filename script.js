@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Intersection Observer sees which card is currently centered in the view
     const observerOptions = {
         root: container,
-        threshold: 0.6 // Trigger when 60% of the card is visible
+        threshold: 0.9 // Trigger when 60% of the card is visible
     };
 
     const observer = new IntersectionObserver((entries) => {
