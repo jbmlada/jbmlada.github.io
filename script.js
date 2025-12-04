@@ -9,8 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
             evt.preventDefault();
             
             // --- Device-Specific Speed Control & Detection ---
-            const trackpadSpeed = 1.5; 
-            const mouseWheelSpeed = 50;  
+            const trackpadSpeed = 80; 
+            const mouseWheelSpeed = 3;  
             let scrollSpeed;
             let scrollAmount = 0;
 
@@ -22,10 +22,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 scrollSpeed = mouseWheelSpeed;
                 
                 // Prioritize horizontal input (deltaX), fall back to vertical (deltaY)
-                if (Math.abs(evt.deltaX) > Math.abs(evt.deltaY)) {
-                    scrollAmount = evt.deltaX;
-                } else {
+                if (Math.abs(evt.deltaY) > Math.abs(evt.deltaX)) {
                     scrollAmount = evt.deltaY;
+                } else {
+                    scrollAmount = evt.deltaX;
                 }
                 
             } else {
