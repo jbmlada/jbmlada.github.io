@@ -104,7 +104,7 @@ nav ul {
 .image-box {
     width: 30vw; /* Adjust width based on preference */
     height: 70vh;
-    border: 2px dotted #fff; /* Changed border color from white to gray for better contrast */
+    border: 2px dotted #fff; /* Changed border color from white to gray */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -116,7 +116,7 @@ nav ul {
 
 .image-box:hover {
     transform: scale(1.0);
-    border-style: solid; 
+    border-style: solid; /* Optional: solidify border on hover */
 }
 
 .image-box img {
@@ -200,31 +200,13 @@ nav ul {
     width: 20vw;
 }
 
-/* Styling for the new Resume elements */
-.resume-group {
-    display: flex; /* Arrange Resume text and icon side-by-side */
-    align-items: center;
-    gap: 0.5rem; /* Small space between text and icon */
-}
-
-/* Style for the download icon */
-.download-icon {
-    font-size: 1.5rem; /* Make the icon size consistent with text */
-    margin-bottom: 0 !important; /* Remove bottom margin */
-    cursor: pointer;
-    line-height: 1; /* Align vertically */
-    padding: 0 0.2rem;
-}
-
-.download-icon:hover {
-    color: #333;
-}
+/* --- Resume View Modal and Link Styles --- */
 
 /* Make the resume modal nearly full screen */
 .large-modal {
     max-width: 90vw; /* Wider than the default modal */
     height: 90vh; /* Taller than the default modal */
-    padding: 1.5rem; /* Slight padding reduction */
+    padding: 1.5rem; 
 }
 
 /* Ensure the iframe fills the modal content */
@@ -239,6 +221,63 @@ nav ul {
     margin-top: 1rem;
 }
 
+/* Container for Resume text and icon */
+.resume-group {
+    display: flex; /* Arrange Resume text and icon side-by-side */
+    align-items: center;
+    gap: 0.2rem; 
+}
+
+/* Custom Download Icon (Mimicking the arrow-over-line design) */
+.download-icon {
+    display: inline-block;
+    width: 1.5rem; 
+    height: 1.5rem; 
+    position: relative;
+    cursor: pointer;
+    /* Reset link styles */
+    font-size: 1rem;
+    margin: 0 0 0.5rem 0.5rem; /* Maintain vertical alignment with Resume text */
+}
+
+.download-icon::before {
+    /* Arrowhead */
+    content: "";
+    position: absolute;
+    top: 0.3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 0.35rem solid transparent;
+    border-top: 0.35rem solid #888; /* Arrow tip */
+    transition: border-top-color 0.2s;
+}
+
+.download-icon::after {
+    /* Arrow stem and base line */
+    content: "";
+    position: absolute;
+    top: 0.2rem;
+    left: 50%;
+    width: 0.1rem;
+    height: 0.7rem;
+    background-color: #888;
+    transform: translateX(-50%);
+    
+    /* Horizontal base line via box-shadow */
+    box-shadow: 0 1.05rem 0 0 #888; 
+    transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.download-icon:hover::before {
+    border-top-color: #333;
+}
+
+.download-icon:hover::after {
+    background-color: #333;
+    box-shadow: 0 1.05rem 0 0 #333;
+}
+
+
 /* --- Mobile/Tablet Responsiveness (Max width 768px) --- */
 @media (max-width: 768px) {
     /* 1. Header Fixes: Stack the elements and make text smaller */
@@ -246,7 +285,6 @@ nav ul {
         padding: 1.5rem 1rem;
         flex-direction: column;
         align-items: center;
-        /* Ensure the header is readable over the content */
         background-color: #ffffff; 
         border-bottom: 1px solid #eee; 
     }
@@ -264,37 +302,46 @@ nav ul {
         font-size: 0.9rem; /* Shrink link text */
     }
     
-    /* 2. Carousel Container: Keep Horizontal Scroll (Do NOT change flex-direction) */
+    /* FIX 2: Center Resume Group */
+    .resume-group {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* FIX 3: Push Projects Lower */
+    #carousel-container {
+        /* Add top margin equal to the header's approximate height to clear it */
+        margin-top: 10vh; 
+    }
+
+    /* FIX 1: Keep Horizontal Scroll and fix centering */
     .carousel-track {
-        padding-left: 10vw !important; /* Smaller centering offset for smaller screens */
-        gap: 5vw; /* Tighter gap */
-        /* Ensure it remains in a row */
+        /* Re-enable horizontal scrolling functionality */
+        padding-left: 10vw !important; 
+        gap: 5vw; 
         flex-direction: row; 
     }
 
-    /* 3. Project Card Fixes: Use a single, mobile-friendly width */
+    /* Project Card Fixes: Use a single, mobile-friendly width */
     .image-box {
-        /* Standard size for mobile, overriding wide/narrow classes */
         width: 80vw !important; 
         height: 60vh !important; 
-        border: 2px dotted #fff; 
     }
-
     .project-card.wide-item .image-box,
     .project-card.narrow-item .image-box {
-        width: 80vw; /* Standardize width */
-        height: 60vh; /* Standardize height */
+        width: 80vw; 
+        height: 60vh;
     }
     
-    /* 4. Spacer Fix: Smaller spacer needed for 80vw cards */
+    /* Spacer Fix: Smaller spacer needed for 80vw cards */
     .spacer {
-        /* Calculated for 80vw card: (100vw/2) - (80vw/2) = 10vw */
-        min-width: 10vw !important;
+        min-width: 10vw !important; /* (100vw/2) - (80vw/2) = 10vw */
     }
 
-    /* 5. Modal Layout Fix: Stack image and text for better viewing */
+    /* Modal Layout Fix: Stack image and text for better viewing */
     .about-grid, .project-detail-layout {
-        grid-template-columns: 1fr; /* Single column */
+        grid-template-columns: 1fr; 
         gap: 1rem;
     }
 }

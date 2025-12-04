@@ -1,37 +1,36 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // --- 1. Horizontal Scroll via Mouse Wheel ---
+    // --- 1. Horizontal Scroll via Mouse Wheel & Trackpad ---
 	const container = document.getElementById('carousel-container');
 
-   container.addEventListener('wheel', (evt) => {
-    evt.preventDefault();
-    
-    // --- Device-Specific Speed Control ---
-    const trackpadSpeed = 50; // HIGH speed for 1:1 feel (Trackpad)
-    const mouseWheelSpeed = 5;  // LOWER speed for controlled scrolling (Mouse Wheel)
+   	 container.addEventListener('wheel', (evt) => {
+        evt.preventDefault();
+        
+        // --- Device-Specific Speed Control ---
+        const trackpadSpeed = 40; // HIGH speed for 1:1 feel (Trackpad)
+        const mouseWheelSpeed = 3;  // LOWER speed for control (Mouse Wheel)
 
-    let scrollSpeed;
+        let scrollSpeed;
 
-    // HEURISTIC: Distinguish between Mouse Wheel (discrete) and Trackpad (continuous)
-    // 1. deltaMode: Modes 1 (lines) or 2 (pages) usually indicate a discrete step from a mouse wheel.
-    // 2. Magnitude Check: A deltaY over 30 (when deltaMode is 0) is often a fast mouse wheel click.
-    if (evt.deltaMode === 1 || evt.deltaMode === 2 || (evt.deltaMode === 0 && Math.abs(evt.deltaY) > 30)) {
-        // Apply lower speed for controlled steps
-        scrollSpeed = mouseWheelSpeed;
-    } else {
-        // Apply high speed for continuous, low-delta input
-        scrollSpeed = trackpadSpeed;
-    }
+        // HEURISTIC: Distinguish between Mouse Wheel (discrete) and Trackpad (continuous)
+        if (evt.deltaMode === 1 || evt.deltaMode === 2 || (evt.deltaMode === 0 && Math.abs(evt.deltaY) > 30)) {
+            // Treat large, discrete steps as a Mouse Wheel
+            scrollSpeed = mouseWheelSpeed;
+        } else {
+            // Treat small, continuous steps as a Trackpad
+            scrollSpeed = trackpadSpeed;
+        }
 
-    // Combine inputs: Use the larger of deltaX or deltaY to determine total movement
-    let scrollAmount = evt.deltaY;
-    if (Math.abs(evt.deltaX) > Math.abs(evt.deltaY)) {
-        scrollAmount = evt.deltaX;
-    }
+        // Combine inputs: Use the larger of deltaX or deltaY
+        let scrollAmount = evt.deltaY;
+        if (Math.abs(evt.deltaX) > Math.abs(evt.deltaY)) {
+            scrollAmount = evt.deltaX;
+        }
 
-    // Apply the device-specific speed
-    container.scrollLeft += scrollAmount * scrollSpeed;
-});
+        // Apply the device-specific speed
+        container.scrollLeft += scrollAmount * scrollSpeed;
+    });
+
     // --- 2. Timeline "Year" Update Logic ---
     const yearDisplay = document.getElementById('year-display');
     const cards = document.querySelectorAll('.project-card');
@@ -45,10 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                // Get the year from the data attribute
                 const year = entry.target.getAttribute('data-year');
-                
-                // Animate/Update the text
                 yearDisplay.style.opacity = 0;
                 setTimeout(() => {
                     yearDisplay.textContent = year;
@@ -60,15 +56,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cards.forEach(card => observer.observe(card));
 
-    // --- 3. Modal Logic (About & Projects) ---
+    // --- 3. Modal Logic (About, Projects, & RESUME) ---
     
     // Elements
     const aboutBtn = document.getElementById('about-btn');
-    // ADDED: New resume view button and modal elements
-    const resumeViewBtn = document.getElementById('resume-view-btn');
+    const resumeViewBtn = document.getElementById('resume-view-btn'); // New Resume view button
     const aboutModal = document.getElementById('about-modal');
     const projectModal = document.getElementById('project-modal');
-    const resumeModal = document.getElementById('resume-modal'); // ADDED
+    const resumeModal = document.getElementById('resume-modal'); // New Resume modal
     const closeBtns = document.querySelectorAll('.close-btn');
 
     // Open About
@@ -77,29 +72,38 @@ document.addEventListener('DOMContentLoaded', () => {
         aboutModal.classList.remove('hidden');
     });
 
-    // ADDED: Open Resume View
+    // Open Resume View (when 'Resume' text is clicked)
     resumeViewBtn.addEventListener('click', (e) => {
         e.preventDefault();
         resumeModal.classList.remove('hidden');
     });
 
-    // Close Modals (X button or clicking outside)
+    // Close Modals (X button)
     closeBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             aboutModal.classList.add('hidden');
             projectModal.classList.add('hidden');
-            resumeModal.classList.add('hidden'); // UPDATED: Close Resume modal
+            resumeModal.classList.add('hidden');
         });
     });
 
+    // Close Modals (clicking outside)
     window.addEventListener('click', (e) => {
         if (e.target === aboutModal) aboutModal.classList.add('hidden');
         if (e.target === projectModal) projectModal.classList.add('hidden');
-        if (e.target === resumeModal) resumeModal.classList.add('hidden'); // UPDATED: Close Resume modal
+        if (e.target === resumeModal) resumeModal.classList.add('hidden');
     });
 
-    // --- 4. Project Click Logic (Global Function - UNCHANGED) ---
+    // --- 4. Project Click Logic (Global Function) ---
     window.openProject = function(element) {
-        // ... (function body UNCHANGED) ...
+        const title = element.getAttribute('data-title');
+        const desc = element.getAttribute('data-desc');
+        const imgSrc = element.getAttribute('data-img');
+
+        document.getElementById('modal-title').innerText = title;
+        document.getElementById('modal-desc').innerText = desc;
+        document.getElementById('modal-img').src = imgSrc;
+
+        projectModal.classList.remove('hidden');
     };
 });
