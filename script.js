@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     container.addEventListener('wheel', (evt) => {
         // Only run custom JS scrolling logic if screen width is > 768px (desktop/tablet)
-        if (window.innerWidth > 768) {
+        if (window.innerWidth > 1) {
             
             // Prevent default page scrolling
             evt.preventDefault();
