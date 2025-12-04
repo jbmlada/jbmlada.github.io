@@ -89,7 +89,7 @@ nav ul {
 .carousel-track {
     display: flex;
     /* FIX: Centering logic for the widest item (45vw) */
-    padding-left: 27.5vw; 
+    padding-left: 40vw; 
     gap: 2vw;
     align-items: center;
 }
@@ -104,7 +104,7 @@ nav ul {
 .image-box {
     width: 30vw; /* Adjust width based on preference */
     height: 70vh;
-    border: 2px dotted #aaa; /* Changed border color from white to gray for better contrast */
+    border: 2px dotted #fff; /* Changed border color from white to gray for better contrast */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -132,7 +132,7 @@ nav ul {
 
 .spacer {
     /* FIX: Matching the new padding-left */
-    min-width: 27.5vw;
+    min-width: 40vw;
 }
 
 /* Modal Styles */
@@ -238,7 +238,7 @@ nav ul {
         /* Standard size for mobile, overriding wide/narrow classes */
         width: 80vw !important; 
         height: 60vh !important; 
-        border: 2px dotted #aaa; 
+        border: 2px dotted #fff; 
     }
 
     .project-card.wide-item .image-box,
