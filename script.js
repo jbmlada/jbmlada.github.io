@@ -9,11 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Keeping scrollSpeed high (20) for rapid movement
         const scrollSpeed = 10; 
 
-        container.scrollBy({
-            left: evt.deltaY * scrollSpeed,
-            // CHANGED: 'smooth' provides the inertial feel needed for trackpads
-            behavior: 'smooth' 
-        });
+// ALTERNATIVE FIX: Direct property assignment is faster than scrollBy.
+        // This relies on the trackpad's native momentum for smoothness.
+        container.scrollLeft += evt.deltaY * scrollSpeed;
     });
     // --- 2. Timeline "Year" Update Logic ---
     const yearDisplay = document.getElementById('year-display');
