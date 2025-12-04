@@ -9,8 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
             evt.preventDefault();
             
             // --- Device-Specific Speed Control ---
-            const trackpadSpeed = 100; 
-            const mouseWheelSpeed = 20;  
+            const trackpadSpeed = 80; 
+            const mouseWheelSpeed = 2;  
             let scrollSpeed;
 
             // HEURISTIC: Distinguish between Mouse Wheel and Trackpad

@@ -88,7 +88,7 @@ nav ul {
 
 .carousel-track {
     display: flex;
-    /* FIX: Centering logic for the widest item (45vw) */
+    /* FIX: Centering logic for the widest item (45vw): (100-45)/2 = 27.5vw */
     padding-left: 40vw; 
     gap: 2vw;
     align-items: center;
@@ -236,7 +236,6 @@ nav ul {
     position: relative;
     cursor: pointer;
     font-size: 1rem;
-    /* Adjust margin to align icon vertically with 'Resume' text */
     margin: 0 0 0.5rem 0.5rem; 
 }
 
@@ -281,6 +280,7 @@ nav ul {
     background-color: #333;
 }
 
+
 /* --- Mobile/Tablet Responsiveness (Max width 768px) --- */
 @media (max-width: 768px) {
     /* 1. Header Fixes: Stack the elements and make text smaller */
@@ -315,7 +315,9 @@ nav ul {
     /* FIX 3: Push Projects Lower */
     #carousel-container {
         /* Add top margin equal to the header's approximate height to clear it */
-        margin-top: 10vh; 
+        margin-top: 20vh; 
+        /* CRITICAL: Enable smooth touch scrolling on iOS/Android */
+        -webkit-overflow-scrolling: touch; 
     }
 
     /* FIX 1: Keep Horizontal Scroll and fix centering */
