@@ -250,6 +250,7 @@ nav ul {
 /* --- Mobile/Tablet Responsiveness (Max width 768px) --- */
 @media (max-width: 768px) {
     /* 1. Header Fixes: Stack the elements and make text smaller */
+/* ... (header, h1, h2, nav ul, nav li, a styles remain unchanged) ... */
     header {
         padding: 1.5rem 1rem;
         flex-direction: column;
@@ -278,11 +279,18 @@ nav ul {
         justify-content: center;
     }
 
-    /* FIX 3: Push Projects Lower */
+    /* FIX 3: Push Projects Lower & Define Scrollable Area Correctly */
     #carousel-container {
-        /* Add top margin equal to the header's approximate height to clear it */
-        margin-top: 20vh; 
-        /* CRITICAL: Enable smooth touch scrolling on iOS/Android */
+        /* Remove margin-top as it incorrectly shrinks the viewable area */
+        margin-top: 0 !important; 
+        
+        /* Start the carousel exactly below the fixed header (estimated at 20vh) */
+        top: 10vh !important; 
+        
+        /* The height of the scrollable area is the viewport height minus the header height */
+        height: calc(100vh - 10vh) !important; 
+        
+        /* CRITICAL: Ensure native touch scrolling is enabled */
         -webkit-overflow-scrolling: touch; 
     }
 
