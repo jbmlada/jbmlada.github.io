@@ -102,7 +102,7 @@ nav ul {
 
 .image-box {
     width: 30vw; /* Adjust width based on preference */
-    height: 45vh;
+    height: 50vh;
     border: 2px dotted #aaa; /* The dotted look */
     display: flex;
     justify-content: center;
@@ -191,7 +191,7 @@ nav ul {
 
 /* Make the 'wide-item' box 45vw wide */
 .project-card.wide-item .image-box {
-    width: 60vw; 
+    width: 45vw; 
     /* You might also want to adjust the height here */
 }
 
