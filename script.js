@@ -1,36 +1,66 @@
 document.addEventListener('DOMContentLoaded', () => {
     
+// --- 0. Dynamic Header Offset (Mobile) ---
+    // Measure actual header height and apply it to the carousel on mobile,
+    // so the carousel always starts exactly below the header regardless of font/zoom.
+    function applyMobileOffset() {
+        if (window.innerWidth <= 768) {
+            const header = document.querySelector('header');
+            const headerHeight = header.getBoundingClientRect().height;
+            container.style.top = headerHeight + 'px';
+            container.style.height = `calc(100vh - ${headerHeight}px)`;
+        } else {
+            container.style.top = '';
+            container.style.height = '';
+        }
+    }
+
 // --- 1. Horizontal Scroll via Mouse Wheel & Trackpad ---
 	const container = document.getElementById('carousel-container');
 
-    // UNCHANGED: Original scrolling logic
+    // Desktop: custom wheel-to-horizontal-scroll
     container.addEventListener('wheel', (evt) => {
-        // Only run custom JS scrolling logic if screen width is > 768px (desktop/tablet)
         if (window.innerWidth > 768) {
             evt.preventDefault();
             
-            // --- Device-Specific Speed Control ---
             const trackpadSpeed = 1; 
             const mouseWheelSpeed = 1;  
             let scrollSpeed;
 
-            // HEURISTIC: Distinguish between Mouse Wheel and Trackpad
             if (evt.deltaMode === 1 || evt.deltaMode === 2 || (evt.deltaMode === 0 && Math.abs(evt.deltaY) > 30)) {
                 scrollSpeed = mouseWheelSpeed;
             } else {
                 scrollSpeed = trackpadSpeed;
             }
 
-            // Combine inputs: Use the larger of deltaX or deltaY
              let scrollAmount = evt.deltaY;
               if (Math.abs(evt.deltaX) > Math.abs(evt.deltaY)) {
               scrollAmount = evt.deltaX;
             }
 
-            // Apply the device-specific speed
             container.scrollLeft += scrollAmount * scrollSpeed;
         }
     });
+
+    // Mobile: touch-drag fallback (reinforces native scroll in case CSS alone isn't enough)
+    let touchStartX = 0;
+    let scrollStartLeft = 0;
+
+    container.addEventListener('touchstart', (evt) => {
+        touchStartX = evt.touches[0].clientX;
+        scrollStartLeft = container.scrollLeft;
+    }, { passive: true });
+
+    container.addEventListener('touchmove', (evt) => {
+        if (window.innerWidth <= 768) {
+            const dx = touchStartX - evt.touches[0].clientX;
+            container.scrollLeft = scrollStartLeft + dx;
+        }
+    }, { passive: true });
+
+    // Run on load and on resize
+    applyMobileOffset();
+    window.addEventListener('resize', applyMobileOffset);
 
 // --- 2. Timeline "Year" Update Logic (Revised for Center Alignment) ---
     const yearDisplay = document.getElementById('year-display');

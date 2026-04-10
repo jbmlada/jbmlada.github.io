@@ -12,6 +12,8 @@ body {
     overflow: hidden; /* Hide main body scroll, we handle it in JS/Container */
     height: 100vh;
     width: 100vw;
+    /* Prevent body from intercepting touch events meant for child scroll containers */
+    touch-action: pan-x pan-y;
 }
 
 /* Typography */
@@ -76,6 +78,10 @@ nav ul {
     display: flex;
     align-items: center;
     overflow-x: scroll;
+    overflow-y: hidden;
+    /* Enable smooth native touch scrolling on iOS and Android */
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
     /* Hide scrollbar */
     scrollbar-width: none; 
     -ms-overflow-style: none;
@@ -269,8 +275,6 @@ nav ul {
 }
 /* --- Mobile/Tablet Responsiveness (Max width 768px) --- */
 @media (max-width: 768px) {
-    /* 1. Header Fixes: Stack the elements and make text smaller */
-/* ... (header, h1, h2, nav ul, nav li, a styles remain unchanged) ... */
     header {
         padding: 1.5rem 1rem;
         flex-direction: column;
@@ -289,58 +293,50 @@ nav ul {
         margin: 0 0.3rem;
     }
     a {
-        font-size: 0.9rem; /* Shrink link text */
+        font-size: 0.9rem;
     }
     
-    /* FIX 2: Center Resume Group */
+    /* Center Resume Group */
     .resume-group {
         display: flex;
         align-items: center;
         justify-content: center;
     }
 
-    /* FIX 3: Push Projects Lower & Define Scrollable Area Correctly */
+    /* Carousel: sit below fixed header, fill remaining space */
     #carousel-container {
-        /* Remove margin-top as it incorrectly shrinks the viewable area */
-        margin-top: 0 !important; 
-        
-        /* Start the carousel exactly below the fixed header (estimated at 20vh) */
-        top: 10vh !important; 
-        
-        /* The height of the scrollable area is the viewport height minus the header height */
-        height: calc(100vh - 10vh) !important; 
-        
-        /* CRITICAL: Ensure native touch scrolling is enabled */
-        -webkit-overflow-scrolling: touch; 
+        top: 130px; /* approximate header height on mobile */
+        height: calc(100vh - 130px);
+        /* Reinforce native horizontal touch scroll */
+        overflow-x: scroll;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-x;
     }
 
-    /* FIX 1: Keep Horizontal Scroll and fix centering */
+    /* Horizontal scroll track */
     .carousel-track {
-        /* Re-enable horizontal scrolling functionality */
-        padding-left: 10vw !important; 
-        gap: 5vw; 
-        flex-direction: row; 
+        padding-left: 10vw;
+        gap: 5vw;
+        flex-direction: row;
     }
 
-    /* Project Card Fixes: Use a single, mobile-friendly width */
-    .image-box {
-        width: 80vw !important; 
-        height: 60vh !important; 
-    }
+    /* All cards use a single mobile-friendly width */
+    .image-box,
     .project-card.wide-item .image-box,
     .project-card.narrow-item .image-box {
-        width: 80vw; 
+        width: 80vw;
         height: 60vh;
     }
     
-    /* Spacer Fix: Smaller spacer needed for 80vw cards */
+    /* Spacer: center first card with 80vw width → (100-80)/2 = 10vw */
     .spacer {
-        min-width: 10vw !important; /* (100vw/2) - (80vw/2) = 10vw */
+        min-width: 10vw;
     }
 
-    /* Modal Layout Fix: Stack image and text for better viewing */
+    /* Modal: stack image and text vertically */
     .about-grid, .project-detail-layout {
-        grid-template-columns: 1fr; 
+        grid-template-columns: 1fr;
         gap: 1rem;
     }
 }
