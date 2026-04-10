@@ -1,30 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-// --- 0. Dynamic Header Offset (Mobile) ---
-    // Measure actual header height and apply it to the carousel on mobile,
-    // so the carousel always starts exactly below the header regardless of font/zoom.
-    function applyMobileOffset() {
-        if (window.innerWidth <= 768) {
-            const header = document.querySelector('header');
-            const headerHeight = header.getBoundingClientRect().height;
-            container.style.top = headerHeight + 'px';
-            container.style.height = `calc(100vh - ${headerHeight}px)`;
-        } else {
-            container.style.top = '';
-            container.style.height = '';
-        }
-    }
+// --- 1. Horizontal Scroll via Mouse Wheel & Trackpad (Desktop) ---
+    const container = document.getElementById('carousel-container');
 
-// --- 1. Horizontal Scroll via Mouse Wheel & Trackpad ---
-	const container = document.getElementById('carousel-container');
-
-    // Desktop: custom wheel-to-horizontal-scroll
     container.addEventListener('wheel', (evt) => {
         if (window.innerWidth > 768) {
             evt.preventDefault();
-            
-            const trackpadSpeed = 1; 
-            const mouseWheelSpeed = 1;  
+
+            const trackpadSpeed = 1;
+            const mouseWheelSpeed = 1;
             let scrollSpeed;
 
             if (evt.deltaMode === 1 || evt.deltaMode === 2 || (evt.deltaMode === 0 && Math.abs(evt.deltaY) > 30)) {
@@ -33,34 +17,66 @@ document.addEventListener('DOMContentLoaded', () => {
                 scrollSpeed = trackpadSpeed;
             }
 
-             let scrollAmount = evt.deltaY;
-              if (Math.abs(evt.deltaX) > Math.abs(evt.deltaY)) {
-              scrollAmount = evt.deltaX;
+            let scrollAmount = evt.deltaY;
+            if (Math.abs(evt.deltaX) > Math.abs(evt.deltaY)) {
+                scrollAmount = evt.deltaX;
             }
 
             container.scrollLeft += scrollAmount * scrollSpeed;
         }
     });
 
-    // Mobile: touch-drag fallback (reinforces native scroll in case CSS alone isn't enough)
-    let touchStartX = 0;
-    let scrollStartLeft = 0;
+// --- 1b. Touch Scroll with Momentum (Mobile) ---
+    let touchLastX = 0;
+    let touchLastTime = 0;
+    let velocity = 0;
+    let momentumRAF = null;
 
+    // Touch start: record position, cancel any running momentum animation
     container.addEventListener('touchstart', (evt) => {
-        touchStartX = evt.touches[0].clientX;
-        scrollStartLeft = container.scrollLeft;
-    }, { passive: true });
-
-    container.addEventListener('touchmove', (evt) => {
-        if (window.innerWidth <= 768) {
-            const dx = touchStartX - evt.touches[0].clientX;
-            container.scrollLeft = scrollStartLeft + dx;
+        touchLastX = evt.touches[0].clientX;
+        touchLastTime = Date.now();
+        velocity = 0;
+        if (momentumRAF) {
+            cancelAnimationFrame(momentumRAF);
+            momentumRAF = null;
         }
     }, { passive: true });
 
-    // Run on load and on resize
-    applyMobileOffset();
-    window.addEventListener('resize', applyMobileOffset);
+    // Touch move: manually drive scrollLeft and track instantaneous velocity
+    container.addEventListener('touchmove', (evt) => {
+        const now = Date.now();
+        const x = evt.touches[0].clientX;
+        const dx = touchLastX - x;        // positive = scrolling right
+        const dt = now - touchLastTime || 1;
+
+        // Exponentially smooth velocity (px/ms)
+        const instantV = dx / dt;
+        velocity = velocity * 0.6 + instantV * 0.4;
+
+        container.scrollLeft += dx;
+        touchLastX = x;
+        touchLastTime = now;
+    }, { passive: true });
+
+    // Touch end: kick off momentum animation using the last tracked velocity
+    container.addEventListener('touchend', () => {
+        const FRICTION = 0.92;     // multiplied each frame — higher = glides longer
+        const MIN_VELOCITY = 0.08; // px/ms threshold to stop the animation
+
+        function momentum() {
+            if (Math.abs(velocity) < MIN_VELOCITY) {
+                velocity = 0;
+                return;
+            }
+            // ~16ms per frame at 60fps, so velocity (px/ms) × 16 = px/frame
+            container.scrollLeft += velocity * 16;
+            velocity *= FRICTION;
+            momentumRAF = requestAnimationFrame(momentum);
+        }
+
+        momentumRAF = requestAnimationFrame(momentum);
+    }, { passive: true });
 
 // --- 2. Timeline "Year" Update Logic (Revised for Center Alignment) ---
     const yearDisplay = document.getElementById('year-display');
