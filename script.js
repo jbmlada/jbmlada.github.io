@@ -147,4 +147,17 @@ document.addEventListener('DOMContentLoaded', () => {
         projectModal.querySelector('.modal-content').scrollTop = 0;
         projectModal.classList.remove('hidden');
     };
+
+    // Keyboard access: Tab to a project image, Enter or Space opens it
+    document.querySelectorAll('.image-box').forEach(box => {
+        box.setAttribute('role', 'button');
+        box.tabIndex = 0;
+        box.setAttribute('aria-label', 'View ' + box.dataset.title);
+        box.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                window.openProject(box);
+            }
+        });
+    });
 });
