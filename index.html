@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=5">
+    <link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
 
@@ -46,7 +46,8 @@
       To show CAD work, add images to data-gallery, e.g.
         data-gallery="assets/images/590 Barrels.jpg::Barrel set|assets/images/590 section.png::Section view of the seed part interface"
       Missing images are skipped automatically.
-      Preview crop (mobile only): --zoom and --focus on the <img> control what the carousel thumbnail shows.
+      Carousel thumbnails live in assets/images/thumbs/. Each is trimmed so the product's bottom edge is the image's bottom edge,
+      which lets CSS line all products up on one baseline.
       data-fit="screen" scales that project's modal images to fit the screen instead of the modal width.
     -->
     <main id="carousel-container">
@@ -60,7 +61,7 @@
                      data-points="Reworked the 3D CAD and 2D drawings to hold fit and function with the new material|Set specs from capability analysis of test data|Built an inline test jig that cut yield loss on the line"
                      data-tags="Siemens NX|Capability analysis|Test jig design|DFM"
                      data-gallery="assets/images/308H Conical.jpg::Production attachment">
-                    <img src="assets/images/308H Conical.jpg" alt="Airwrap Conical Curling Barrel" decoding="async">
+                    <img src="assets/images/thumbs/conical.jpg" alt="Airwrap Conical Curling Barrel" decoding="async">
                     <span class="corner-icon" aria-hidden="true">+</span>
                 </div>
             </article>
@@ -72,9 +73,11 @@
                      data-points="Modelled the modular barrel architecture in NX, including the common seed part|Ran dynamic tolerance stacks on plastic to metal interfaces to predict fit before tooling|Set robustness targets from user trials, then tuned part geometry with toolmakers for stable high volume molding"
                      data-tags="Siemens NX|Tolerance stack|GD&amp;T|DFM|Tooling"
                      data-gallery="assets/images/590 Barrels.jpg::Full barrel set">
-                    <!-- Thumbnail shows only the middle barrel. Tune --zoom (bigger = tighter) and --focus (x y). -->
-                    <img src="assets/images/590 Barrels.jpg" alt="Airwrap Co-anda2x middle curling barrel"
-                         style="--zoom: 2.4; --focus: 50% 50%" decoding="async" loading="lazy">
+                    <!-- Desktop shows the full barrel set; mobile shows only the middle barrel -->
+                    <picture>
+                        <source media="(max-width: 768px)" srcset="assets/images/thumbs/barrels-middle.jpg">
+                        <img src="assets/images/thumbs/barrels.jpg" alt="Airwrap Co-anda2x curling barrels" decoding="async" loading="lazy">
+                    </picture>
                     <span class="corner-icon" aria-hidden="true">+</span>
                 </div>
             </article>
@@ -87,7 +90,7 @@
                      data-points="Owned the Cool Tip end to end in CAD, balancing thermal and structural limits with the ID requirements|Reworked the internal structure and air paths for the larger brush|Led design verification with rapid prototypes and root cause analysis to close failure modes before mass production"
                      data-tags="Siemens NX|Thermal design|Airflow paths|Rapid prototyping|RCA"
                      data-gallery="assets/images/308E LRB.jpg::Large Round Volumizing Brush">
-                    <img src="assets/images/308E LRB1.jpg" alt="Airwrap Large Round Volumizing Brush" decoding="async" loading="lazy">
+                    <img src="assets/images/thumbs/lrb.jpg" alt="Airwrap Large Round Volumizing Brush" decoding="async" loading="lazy">
                     <span class="corner-icon" aria-hidden="true">+</span>
                 </div>
             </article>
@@ -131,6 +134,6 @@
         </div>
     </div>
 
-    <script src="script.js?v=5"></script>
+    <script src="script.js?v=6"></script>
 </body>
 </html>

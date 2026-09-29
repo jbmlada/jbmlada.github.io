@@ -87,12 +87,13 @@ nav ul { list-style: none; text-align: right; }
 }
 .image-box:focus-visible { outline: 1px solid #333; outline-offset: 4px; }
 
-/* On mobile only, --zoom and --focus crop a card's thumbnail (see index.html) */
 .image-box img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: 50% 100%; /* thumbnails end exactly at the product's bottom edge, so all bottoms share one baseline */
 }
+.image-box picture { display: contents; }
 
 
 /* Corner "+" tells people the image opens something (also visible on touch screens) */
@@ -227,11 +228,6 @@ nav ul { list-style: none; text-align: right; }
         height: auto;
     }
 
-    .image-box img {
-        object-position: var(--focus, 50% 50%);
-        transform: scale(var(--zoom, 1));
-        transform-origin: var(--focus, 50% 50%);
-    }
 
     .carousel-track { padding-left: 10vw; gap: 5vw; }
 
