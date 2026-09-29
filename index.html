@@ -2,14 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Juan Lada | Design Portfolio</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -19,66 +17,76 @@
             <h1>Juan Lada</h1>
             <h2 id="year-display">2025</h2>
         </div>
-        
+
         <nav>
             <ul>
                 <li><a href="#" id="about-btn">About</a></li>
-                <li><a href="https://www.linkedin.com/in/juan-lada/" target="_blank">Linkedin</a></li> 
+                <li><a href="https://www.linkedin.com/in/juan-lada/" target="_blank" rel="noopener">Linkedin</a></li>
                 <li class="resume-group">
-                    <a href="#" id="resume-view-btn">Resume</a>
-                    <a href="assets/files/JuanLada_Resume.pdf" download class="download-icon" title="Download Resume">↓</a> 
+                    <!-- Desktop: opens the modal. Mobile: opens the PDF in a new tab (iOS can't preview PDFs in iframes). -->
+                    <a href="assets/files/JuanLada_Resume.pdf" target="_blank" rel="noopener" id="resume-view-btn">Resume</a>
+                    <a href="assets/files/JuanLada_Resume.pdf" download class="download-icon" title="Download Resume">↓</a>
                 </li>
-                </ul>
+            </ul>
         </nav>
     </header>
 
     <div id="resume-modal" class="modal-overlay hidden">
         <div class="modal-content large-modal">
             <span class="close-btn">&times;</span>
-            <iframe id="resume-iframe" src="assets/files/JuanLada_Resume.pdf" width="100%" height="100%" frameborder="0"></iframe>
+            <iframe id="resume-iframe" data-src="assets/files/JuanLada_Resume.pdf" title="Resume"></iframe>
         </div>
     </div>
 
+    <!--
+      Project data format (read by openProject in script.js):
+        data-points   : bullet points separated by |
+        data-tags     : chips separated by |
+        data-gallery  : images separated by |, each as "path::caption"
+      To show CAD work, add images to data-gallery, e.g.
+        data-gallery="assets/images/590 Barrels.jpg::Barrel set|assets/images/590 section.png::Section view of the seed part interface"
+      Missing images are skipped automatically.
+      Preview crop: --zoom and --focus on the <img> control what the carousel thumbnail shows.
+    -->
     <main id="carousel-container">
         <div class="carousel-track">
-            
+
             <article class="project-card narrow-item" data-year="2025">
-                <div class="image-box" onclick="openProject(this)" 
-                     data-title="Airwrap - Conical Curling Barrel" 
-                     data-desc="The Conical Curling Barrel is one of the Airwrap's most sought after and most demanded attachments; millions of units are produced every year. A big contributor to the per unit cost of the attachment also happens to be a key factor in the attachment's overall performance. This project proposes an alternative material that lowers overhead costs - leading to <strong>$2 saved per unit</strong> - while still maintaining the performance of the original configuration.<br><br> <ul>
-					<li><strong>Design Modification & Continuity</strong>: Executed comprehensive design modifications by reworking existing 3D CAD and 2D documentation, successfully achieving functional and performance parity with the original assembly configuration.</li><br>
-					<li><strong>Data-Driven Specification</strong>: Established and refined critical product specifications by applying in-depth statistical and capability analysis to test data, ensuring dependable performance requirements were met.</li><br>
-					<li><strong>Manufacturing Quality Control</strong>: Designed and implemented a dedicated testing jig directly on the production line to improve quality checks and dramatically reduce manufacturing yield loss.</li>
-				</ul>"
-                     data-img="assets/images/308H Conical.jpg">
-                    <img src="assets/images/308H Conical.jpg" alt="Airwrap - Conical Curling Barrel">
+                <div class="image-box" onclick="openProject(this)"
+                     data-title="Airwrap Conical Curling Barrel"
+                     data-summary="A material swap that saves $2 per unit on one of the highest volume Airwrap attachments, with no loss in performance."
+                     data-points="Reworked the 3D CAD and 2D drawings to hold fit and function with the new material|Set specs from capability analysis of test data|Built an inline test jig that cut yield loss on the line"
+                     data-tags="Siemens NX|Capability analysis|Test jig design|DFM"
+                     data-gallery="assets/images/308H Conical.jpg::Production attachment">
+                    <img src="assets/images/308H Conical.jpg" alt="Airwrap Conical Curling Barrel" decoding="async">
                 </div>
+                <p class="project-title">Conical Curling Barrel</p>
             </article>
 
             <article class="project-card wide-item" data-year="2023">
-                <div class="image-box" onclick="openProject(this)" 
-                     data-title="Airwrap Co-anda2x - Curling Barrels" 
-                     data-desc="The Co-anda2x marked a significant milestone as the first next-evolution Dyson product fully developed in the Philippines, with the iconic curling barrels serving as the most critical component. Since the barrels are essential to the user experience, their robust engineering was fundamental to validating the entire machine’s functionality and securing a successful market launch.<br><br> <ul>
-					<li><strong>Precision Part Interaction</strong>: Developed the architecture for key modular components (including the common seed part), leveraging dynamic tolerance analysis to predict and optimize fit and interaction between dissimilar plastic and metal interfaces.</li><br>
-					<li><strong>User-Centric Robustness Requirement</strong>: Established critical component robustness requirements based on insights gathered from direct user trials, ensuring the design met real-world performance and user-interaction demands.</li><br>
-					<li><strong>Production Quality Assurance</strong>: Cooperated closely with tooling engineers and toolmakers throughout the design cycle to optimize part geometry and condition for ideal quality and stability during high-volume manufacturing.</li>
-				</ul>"
-                     data-img="assets/images/590 Barrels.jpg">
-                    <img src="assets/images/590 Barrels.jpg" alt="Airwrap Co-anda2x - Curling Barrels">
+                <div class="image-box" onclick="openProject(this)"
+                     data-title="Airwrap Co-anda2x Curling Barrels"
+                     data-summary="The first next-generation Dyson product fully developed in the Philippines, with the curling barrels as its most critical part."
+                     data-points="Modelled the modular barrel architecture in NX, including the common seed part|Ran dynamic tolerance stacks on plastic to metal interfaces to predict fit before tooling|Set robustness targets from user trials, then tuned part geometry with toolmakers for stable high volume molding"
+                     data-tags="Siemens NX|Tolerance stack|GD&amp;T|DFM|Tooling"
+                     data-gallery="assets/images/590 Barrels.jpg::Full barrel set">
+                    <!-- Thumbnail shows only the middle barrel. Tune --zoom (bigger = tighter) and --focus (x y). -->
+                    <img src="assets/images/590 Barrels.jpg" alt="Airwrap Co-anda2x middle curling barrel"
+                         style="--zoom: 2.4; --focus: 50% 50%" decoding="async" loading="lazy">
                 </div>
+                <p class="project-title">Co-anda2x Curling Barrels</p>
             </article>
 
             <article class="project-card narrow-item" data-year="2022">
-                <div class="image-box" onclick="openProject(this)" 
-                     data-title="Airwrap - Large Round Volumizing Brush" 
-                     data-desc="This attachment was developed to address customer demand for greater hair volume, as the existing brush diameter was too small for many users. The project involved re-engineering the existing internal structure and air paths to successfully create the Large Round Volumizing Brush for mass production. <br><br> <ul>
-					<li><strong>Accelerated Delivery</strong>: Leveraged agile cross-team design sprints to successfully execute the company's fastest-ever new product launch at the time.</li><br>
-					<li><strong>Component Engineering</strong>: Owned the end-to-end development of the Cool Tip, harmonizing complex thermal and structural constraints with the sleek Industrial Design requirements.</li><br>
-					<li><strong>Validation & Iteration</strong>: Led the design verification process, utilizing rapid prototyping and Root Cause Analysis (RCA) to identify failure modes and engineer robust solutions prior to mass production.</li>
-				    </ul>"
-                     data-img="assets/images/308E LRB.jpg">
-                    <img src="assets/images/308E LRB1.jpg" alt="Airwrap - Large Round Volumizing Brush">
+                <div class="image-box" onclick="openProject(this)"
+                     data-title="Airwrap Large Round Volumizing Brush"
+                     data-summary="A bigger diameter for users who wanted more volume. Internals and air paths re-engineered for Dyson's fastest new product launch at the time."
+                     data-points="Owned the Cool Tip end to end in CAD, balancing thermal and structural limits with the ID requirements|Reworked the internal structure and air paths for the larger brush|Led design verification with rapid prototypes and root cause analysis to close failure modes before mass production"
+                     data-tags="Siemens NX|Thermal design|Airflow paths|Rapid prototyping|RCA"
+                     data-gallery="assets/images/308E LRB.jpg::Large Round Volumizing Brush">
+                    <img src="assets/images/308E LRB1.jpg" alt="Airwrap Large Round Volumizing Brush" decoding="async" loading="lazy">
                 </div>
+                <p class="project-title">Large Round Volumizing Brush</p>
             </article>
 
             <div class="spacer"></div>
@@ -92,16 +100,14 @@
                 <img src="assets/images/profile.jpg" alt="Portrait of Juan">
                 <div>
                     <h3>Juan Lada</h3>
-                    <p>is a Design Engineer who excels in translating conceptual designs into cost-effective, mass-produced products by applying the following key technical proficiencies: 
-			<br><br>
-			<ul style="padding-left: 25px;">
-		 	   <li>3D CAD Modelling & 2D Drafting</li>
-		 	   <li>Tolerance Stack</li>
-		 	   <li>Design for Manufacturing &<br>Design for Assembly</li>
-		 	   <li>Production Part Approval Process</li>
-		 	   <li>Prototype/Mockup fabrication & testing</li>
-			</ul>
-		    </p>
+                    <p>is a Design Engineer who excels in translating conceptual designs into cost-effective, mass-produced products by applying the following key technical proficiencies:</p>
+                    <ul style="padding-left: 25px; margin-top: 1rem;">
+                        <li>3D CAD Modelling & 2D Drafting</li>
+                        <li>Tolerance Stack</li>
+                        <li>Design for Manufacturing &amp;<br>Design for Assembly</li>
+                        <li>Production Part Approval Process</li>
+                        <li>Prototype/Mockup fabrication & testing</li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -111,10 +117,12 @@
         <div class="modal-content">
             <span class="close-btn">&times;</span>
             <div class="project-detail-layout">
-                <img id="modal-img" src="" alt="">
+                <div id="modal-gallery"></div>
                 <div>
                     <h3 id="modal-title"></h3>
-                    <div id="modal-desc"></div> 
+                    <p id="modal-summary"></p>
+                    <ul id="modal-points"></ul>
+                    <div id="modal-tags" class="tags"></div>
                 </div>
             </div>
         </div>

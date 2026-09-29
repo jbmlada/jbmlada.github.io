@@ -1,35 +1,20 @@
 /* Reset and Base Styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
     font-family: "Roboto Mono", monospace;
     background-color: #ffffff;
     color: #333;
-    overflow: hidden; /* Hide main body scroll, we handle it in JS/Container */
+    overflow: hidden;
     height: 100vh;
-    width: 100vw;
-    /* Prevent body from intercepting touch events meant for child scroll containers */
+    height: 100dvh; /* accounts for mobile browser toolbars */
+    width: 100%;
     touch-action: pan-x pan-y;
 }
 
 /* Typography */
-h1 {
-    font-size: 2rem;
-    font-weight: 400;
-    color: #555;
-}
-
-h2 {
-    font-size: 2.5rem;
-    font-weight: 400;
-    color: #555;
-    margin-top: 0.5rem;
-    transition: opacity 0.3s ease;
-}
+h1 { font-size: 2rem; font-weight: 400; color: #555; }
+h2 { font-size: 2.5rem; font-weight: 400; color: #555; margin-top: 0.5rem; transition: opacity 0.3s ease; }
 
 a {
     text-decoration: none;
@@ -39,12 +24,9 @@ a {
     margin-bottom: 0.5rem;
     transition: color 0.2s;
 }
+a:hover { color: #333; }
 
-a:hover {
-    color: #333;
-}
-
-/* Fixed Header Layout */
+/* Header */
 header {
     position: fixed;
     top: 0;
@@ -55,20 +37,15 @@ header {
     justify-content: space-between;
     align-items: flex-start;
     z-index: 10;
-    pointer-events: none; /* Let clicks pass through empty space */
+    pointer-events: none;
 }
+.brand, nav { pointer-events: auto; }
+nav ul { list-style: none; text-align: right; }
 
-/* Re-enable clicks on the actual text */
-.brand, nav {
-    pointer-events: auto;
-}
+.resume-group { display: flex; align-items: center; gap: 0.2rem; }
+.download-icon { margin-left: 0.2rem; font-weight: 400; }
 
-nav ul {
-    list-style: none;
-    text-align: right;
-}
-
-/* Carousel Container */
+/* Carousel */
 #carousel-container {
     position: absolute;
     top: 0;
@@ -79,37 +56,27 @@ nav ul {
     align-items: center;
     overflow-x: scroll;
     overflow-y: hidden;
-    /* Enable smooth native touch scrolling on iOS and Android */
     -webkit-overflow-scrolling: touch;
     touch-action: pan-x;
-    /* Hide scrollbar */
-    scrollbar-width: none; 
+    scrollbar-width: none;
     -ms-overflow-style: none;
 }
-
-#carousel-container::-webkit-scrollbar { 
-    display: none; 
-}
+#carousel-container::-webkit-scrollbar { display: none; }
 
 .carousel-track {
     display: flex;
-    /* FIX: Centering logic for the widest item (45vw): (100-45)/2 = 27.5vw */
-    padding-left: 40vw; 
+    padding-left: 40vw;
     gap: 2vw;
     align-items: center;
 }
 
-/* Project Cards */
-.project-card {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
+/* Project cards */
+.project-card { display: flex; flex-direction: column; gap: 1rem; flex: none; }
 
 .image-box {
-    width: 30vw; /* Adjust width based on preference */
-    height: 70vh;
-    border: 2px dotted #fff; /* Changed border color from white to gray */
+    width: 30vw;
+    height: 65vh;
+    border: 2px dotted #fff;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -118,29 +85,26 @@ nav ul {
     background: #fff;
     transition: transform 0.3s ease;
 }
+.image-box:hover { transform: scale(1.02); border-style: solid; }
 
-.image-box:hover {
-    transform: scale(1.02);
-    border-style: solid; /* Optional: solidify border on hover */
-}
-
+/* --zoom and --focus let one card crop its thumbnail (see index.html) */
 .image-box img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: var(--focus, 50% 50%);
+    transform: scale(var(--zoom, 1));
+    transform-origin: var(--focus, 50% 50%);
 }
 
-.project-title {
-    color: #333; 
-    font-size: 1.2rem;
-}
+.project-title { color: #555; font-size: 1rem; }
 
-.spacer {
-    /* FIX: Matching the new padding-left */
-    min-width: 40vw;
-}
+.project-card.wide-item .image-box { width: 45vw; }
+.project-card.narrow-item .image-box { width: 20vw; }
 
-/* Modal Styles */
+.spacer { min-width: 40vw; flex: none; }
+
+/* Modals */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -148,7 +112,7 @@ nav ul {
     width: 100%;
     height: 100%;
     background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(15px); /* The Blur Effect */
+    backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     z-index: 100;
     display: flex;
@@ -157,11 +121,7 @@ nav ul {
     opacity: 1;
     transition: opacity 0.3s ease;
 }
-
-.hidden {
-    opacity: 0;
-    pointer-events: none;
-}
+.hidden { opacity: 0; pointer-events: none; }
 
 .modal-content {
     background: white;
@@ -169,15 +129,7 @@ nav ul {
     max-width: 800px;
     width: 90%;
     position: relative;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-}
-
-/* --- Adjusting Project Modal Specific Width --- */
-#project-modal .modal-content {
-    max-width: 150vw; 
-    width: 1200px; 
-    max-height: 80vh; 
-    overflow-y: auto; 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .close-btn {
@@ -188,155 +140,103 @@ nav ul {
     cursor: pointer;
 }
 
-/* About Grid */
-.about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    align-items: center;
-}
-
+.about-grid,
 .project-detail-layout {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
     align-items: center;
 }
+.about-grid img { width: 100%; height: auto; }
 
-.about-grid img {
-    width: 100%;
-    height: auto;
+/* Project modal */
+#project-modal .modal-content {
+    max-width: 92vw;
+    width: 1100px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+.project-detail-layout { align-items: start; }
+
+#modal-gallery { display: grid; gap: 1rem; }
+#modal-gallery img { width: 100%; height: auto; display: block; }
+#modal-gallery figcaption { font-size: 0.75rem; color: #888; margin-top: 0.4rem; }
+
+#modal-summary { font-size: 1.05rem; line-height: 1.5; margin: 1rem 0 1.25rem; }
+#modal-points { list-style: none; display: grid; gap: 0.75rem; line-height: 1.5; font-size: 0.9rem; }
+#modal-points li { padding-left: 1rem; border-left: 2px solid #ddd; }
+
+.tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
+.tags span { font-size: 0.75rem; color: #666; border: 1px solid #ccc; padding: 0.2rem 0.6rem; }
+
+/* Resume modal (desktop) */
+.large-modal { max-width: 90vw; height: 90vh; padding: 1.5rem; }
+#resume-modal .modal-content { display: flex; flex-direction: column; }
+#resume-modal iframe { flex-grow: 1; border: none; margin-top: 1rem; width: 100%; }
+
+/* Hover effects only where hover exists (avoids sticky hover on touch) */
+@media (hover: none) {
+    .image-box:hover { transform: none; border-style: dotted; }
 }
 
-.project-detail-layout img {
-    width: 100%;
-    height: auto;
-}
-
-/* Custom Widths for Specific Projects */
-
-/* Make the 'wide-item' box 45vw wide */
-.project-card.wide-item .image-box {
-    width: 45vw; 
-}
-
-/* Make the 'narrow-item' box 20vw wide */
-.project-card.narrow-item .image-box {
-    width: 20vw;
-}
-
-/* --- Resume View Modal and Link Styles --- */
-
-/* Make the resume modal nearly full screen */
-.large-modal {
-    max-width: 90vw; /* Wider than the default modal */
-    height: 90vh; /* Taller than the default modal */
-    padding: 1.5rem; 
-}
-
-/* Ensure the iframe fills the modal content */
-#resume-modal .modal-content {
-    display: flex;
-    flex-direction: column;
-}
-
-#resume-modal iframe {
-    flex-grow: 1;
-    border: none;
-    margin-top: 1rem;
-}
-
-/* Container for Resume text and icon */
-.resume-group {
-    display: flex; /* Arrange Resume text and icon side-by-side */
-    align-items: center;
-    gap: 0.2rem; 
-}
-
-/* Custom Download Icon (Reworked to use Material Icons) */
-.download-icon {
-    /* Base styles from the original link (a) */
-    text-decoration: none;
-    color: #888;
-    font-size: 1.5rem; 
-    display: block;
-    margin-bottom: 0.5rem; /* Match existing 'a' margin */
-    transition: color 0.2s;
-
-    /* Specific adjustments for icon positioning */
-    margin-left: 0.2rem; 
-    
-    /* Ensure the icon is a standard size and weight */
-    font-weight: 400; 
-}
-
-.download-icon:hover {
-    color: #333; /* Match existing hover color */
-}
-/* --- Mobile/Tablet Responsiveness (Max width 768px) --- */
+/* Mobile / tablet */
 @media (max-width: 768px) {
+    /* Header sits in normal flow, so the carousel never depends on a guessed header height */
+    body { display: flex; flex-direction: column; }
+
     header {
-        padding: 1.5rem 1rem;
+        position: relative;
+        flex: none;
+        padding: 1rem 1rem 0.5rem;
         flex-direction: column;
         align-items: center;
-        background-color: #ffffff; 
-        border-bottom: 1px solid #eee; 
+        background: #fff;
+        border-bottom: 1px solid #eee;
+        pointer-events: auto;
     }
-    h1 { font-size: 1.5rem; }
-    h2 { font-size: 2rem; }
-    nav ul {
-        text-align: center;
-        padding-top: 0.5rem;
-    }
-    nav li {
-        display: inline-block;
-        margin: 0 0.3rem;
-    }
-    a {
-        font-size: 0.9rem;
-    }
-    
-    /* Center Resume Group */
-    .resume-group {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+    h1 { font-size: 1.4rem; }
+    h2 { font-size: 1.8rem; margin-top: 0.25rem; }
 
-    /* Carousel: sit below fixed header, fill remaining space */
+    nav ul { text-align: center; }
+    nav li { display: inline-block; margin: 0 0.2rem; }
+    nav li.resume-group { display: inline-flex; }
+    a { font-size: 0.95rem; padding: 0.6rem 0.5rem; margin-bottom: 0; } /* larger tap targets */
+
     #carousel-container {
-        top: 130px; /* approximate header height on mobile */
-        height: calc(100vh - 130px);
-        /* Reinforce native horizontal touch scroll */
-        overflow-x: scroll;
-        overflow-y: hidden;
-        -webkit-overflow-scrolling: touch;
-        touch-action: pan-x;
+        position: relative;
+        flex: 1;
+        min-height: 0;
+        height: auto;
+        scroll-snap-type: x mandatory;
+        overscroll-behavior-x: contain;
     }
 
-    /* Horizontal scroll track */
-    .carousel-track {
-        padding-left: 10vw;
-        gap: 5vw;
-        flex-direction: row;
-    }
+    .carousel-track { padding-left: 10vw; gap: 5vw; }
+    .project-card { scroll-snap-align: center; scroll-snap-stop: always; }
 
-    /* All cards use a single mobile-friendly width */
     .image-box,
     .project-card.wide-item .image-box,
     .project-card.narrow-item .image-box {
         width: 80vw;
-        height: 60vh;
+        height: min(58dvh, 130vw);
     }
-    
-    /* Spacer: center first card with 80vw width → (100-80)/2 = 10vw */
-    .spacer {
-        min-width: 10vw;
-    }
+    .project-title { font-size: 0.9rem; text-align: center; }
 
-    /* Modal: stack image and text vertically */
-    .about-grid, .project-detail-layout {
-        grid-template-columns: 1fr;
-        gap: 1rem;
+    .spacer { min-width: 10vw; }
+
+    /* Modals: stack, use nearly the full screen, keep the close button reachable */
+    .modal-content { padding: 1.25rem; width: 92%; }
+    #project-modal .modal-content,
+    #about-modal .modal-content { max-height: 85dvh; overflow-y: auto; }
+    .about-grid, .project-detail-layout { grid-template-columns: 1fr; gap: 1rem; }
+
+    .close-btn {
+        position: fixed;
+        top: 0.5rem;
+        right: 0.75rem;
+        font-size: 2.5rem;
+        line-height: 1;
+        padding: 0.25rem 0.75rem;
+        z-index: 110;
     }
 }

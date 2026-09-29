@@ -1,221 +1,104 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
-// --- 1. Horizontal Scroll via Mouse Wheel & Trackpad (Desktop) ---
+
     const container = document.getElementById('carousel-container');
+    const isMobile = () => window.innerWidth <= 768;
 
-    container.addEventListener('wheel', (evt) => {
-        if (window.innerWidth > 768) {
-            evt.preventDefault();
+    // --- 1. Mouse wheel / trackpad scrolls the carousel sideways (desktop only) ---
+    // Mobile uses native touch scrolling with CSS scroll-snap. The old custom touch
+    // handler is removed: it added to scrollLeft on top of the browser's own scrolling,
+    // which doubled the movement and fought the momentum.
+    container.addEventListener('wheel', (e) => {
+        if (isMobile()) return;
+        e.preventDefault();
+        const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+        container.scrollLeft += delta * (e.deltaMode === 1 ? 32 : 1);
+    }, { passive: false });
 
-            const trackpadSpeed = 1;
-            const mouseWheelSpeed = 1;
-            let scrollSpeed;
-
-            if (evt.deltaMode === 1 || evt.deltaMode === 2 || (evt.deltaMode === 0 && Math.abs(evt.deltaY) > 30)) {
-                scrollSpeed = mouseWheelSpeed;
-            } else {
-                scrollSpeed = trackpadSpeed;
-            }
-
-            let scrollAmount = evt.deltaY;
-            if (Math.abs(evt.deltaX) > Math.abs(evt.deltaY)) {
-                scrollAmount = evt.deltaX;
-            }
-
-            container.scrollLeft += scrollAmount * scrollSpeed;
-        }
-    });
-
-// --- 1b. Touch Scroll with Momentum (Mobile) ---
-    let touchLastX = 0;
-    let touchLastTime = 0;
-    let velocity = 0;
-    let momentumRAF = null;
-
-    // Touch start: record position, cancel any running momentum animation
-    container.addEventListener('touchstart', (evt) => {
-        touchLastX = evt.touches[0].clientX;
-        touchLastTime = Date.now();
-        velocity = 0;
-        if (momentumRAF) {
-            cancelAnimationFrame(momentumRAF);
-            momentumRAF = null;
-        }
-    }, { passive: true });
-
-    // Touch move: manually drive scrollLeft and track instantaneous velocity
-    container.addEventListener('touchmove', (evt) => {
-        const now = Date.now();
-        const x = evt.touches[0].clientX;
-        const dx = touchLastX - x;        // positive = scrolling right
-        const dt = now - touchLastTime || 1;
-
-        // Exponentially smooth velocity (px/ms)
-        const instantV = dx / dt;
-        velocity = velocity * 0.6 + instantV * 0.4;
-
-        container.scrollLeft += dx;
-        touchLastX = x;
-        touchLastTime = now;
-    }, { passive: true });
-
-    // Touch end: kick off momentum animation using the last tracked velocity
-    container.addEventListener('touchend', () => {
-        const FRICTION = 0.92;     // multiplied each frame — higher = glides longer
-        const MIN_VELOCITY = 0.08; // px/ms threshold to stop the animation
-
-        function momentum() {
-            if (Math.abs(velocity) < MIN_VELOCITY) {
-                velocity = 0;
-                return;
-            }
-            // ~16ms per frame at 60fps, so velocity (px/ms) × 16 = px/frame
-            container.scrollLeft += velocity * 16;
-            velocity *= FRICTION;
-            momentumRAF = requestAnimationFrame(momentum);
-        }
-
-        momentumRAF = requestAnimationFrame(momentum);
-    }, { passive: true });
-
-// --- 2. Timeline "Year" Update Logic (Revised for Center Alignment) ---
+    // --- 2. Year display follows the card closest to center ---
     const yearDisplay = document.getElementById('year-display');
-    const cards = document.querySelectorAll('.project-card');
+    const cards = [...document.querySelectorAll('.project-card')];
 
     function updateYearDisplay() {
-        const container = document.getElementById('carousel-container');
-        // Calculate the horizontal center position of the visible container area
-        const containerCenter = container.scrollLeft + container.clientWidth / 2;
-        
-        let closestCard = null;
-        let minDifference = Infinity;
+        const center = container.scrollLeft + container.clientWidth / 2;
+        let closest = cards[0];
+        let min = Infinity;
 
         cards.forEach(card => {
-            // Calculate the card's midpoint relative to the carousel start (0)
-            const cardMidpoint = card.offsetLeft + card.offsetWidth / 2;
-            
-            // Calculate the absolute distance from the card midpoint to the container center
-            const difference = Math.abs(cardMidpoint - containerCenter);
-
-            if (difference < minDifference) {
-                minDifference = difference;
-                closestCard = card;
-            }
+            const d = Math.abs(card.offsetLeft + card.offsetWidth / 2 - center);
+            if (d < min) { min = d; closest = card; }
         });
 
-        if (closestCard) {
-            const newYear = closestCard.getAttribute('data-year');
-            const currentYear = yearDisplay.textContent;
-
-            // Only update if the year has actually changed
-            if (newYear !== currentYear) {
-                yearDisplay.style.opacity = 0;
-                setTimeout(() => {
-                    yearDisplay.textContent = newYear;
-                    yearDisplay.style.opacity = 1;
-                }, 200);
-            }
+        const year = closest.dataset.year;
+        if (year !== yearDisplay.textContent) {
+            yearDisplay.style.opacity = 0;
+            setTimeout(() => {
+                yearDisplay.textContent = year;
+                yearDisplay.style.opacity = 1;
+            }, 200);
         }
     }
 
-    // Attach the new logic to the scroll event of the container
-    container.addEventListener('scroll', updateYearDisplay);
-
-    // Initial update on page load (required)
-    // Use a slight delay to ensure all CSS/layout is rendered before calculation
+    container.addEventListener('scroll', updateYearDisplay, { passive: true });
     setTimeout(updateYearDisplay, 50);
-    // --- 3. Modal Logic (About, Projects, & RESUME) ---
-    
-    // Elements
-    const aboutBtn = document.getElementById('about-btn');
-    const resumeViewBtn = document.getElementById('resume-view-btn'); // New Resume view button
+
+    // --- 3. Modals ---
     const aboutModal = document.getElementById('about-modal');
     const projectModal = document.getElementById('project-modal');
-    const resumeModal = document.getElementById('resume-modal'); // New Resume modal
-    const closeBtns = document.querySelectorAll('.close-btn');
+    const resumeModal = document.getElementById('resume-modal');
+    const allModals = document.querySelectorAll('.modal-overlay');
+    const closeAll = () => allModals.forEach(m => m.classList.add('hidden'));
 
-    // Open About
-    aboutBtn.addEventListener('click', (e) => {
+    document.getElementById('about-btn').addEventListener('click', (e) => {
         e.preventDefault();
         aboutModal.classList.remove('hidden');
     });
 
-    // Open Resume View (when 'Resume' text is clicked)
-    resumeViewBtn.addEventListener('click', (e) => {
+    // Desktop: preview in a modal. Mobile: let the link open the PDF in a new tab.
+    document.getElementById('resume-view-btn').addEventListener('click', (e) => {
+        if (isMobile()) return;
         e.preventDefault();
+        const frame = document.getElementById('resume-iframe');
+        if (!frame.getAttribute('src')) frame.src = frame.dataset.src;
         resumeModal.classList.remove('hidden');
     });
 
-    // Close Modals (X button)
-    closeBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            aboutModal.classList.add('hidden');
-            projectModal.classList.add('hidden');
-            resumeModal.classList.add('hidden');
-        });
-    });
+    document.querySelectorAll('.close-btn').forEach(btn => btn.addEventListener('click', closeAll));
+    allModals.forEach(m => m.addEventListener('click', (e) => { if (e.target === m) closeAll(); }));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAll(); });
 
-    // Close Modals (clicking outside)
-    window.addEventListener('click', (e) => {
-        if (e.target === aboutModal) aboutModal.classList.add('hidden');
-        if (e.target === projectModal) projectModal.classList.add('hidden');
-        if (e.target === resumeModal) resumeModal.classList.add('hidden');
-    });
+    // --- 4. Project modal (content comes from data attributes; see index.html) ---
+    const el = (tag, text) => {
+        const node = document.createElement(tag);
+        node.textContent = text;
+        return node;
+    };
 
-    // --- 4. Project Click Logic (Global Function) ---
-    window.openProject = function(element) {
-        const title = element.getAttribute('data-title');
-        const rawDesc = element.getAttribute('data-desc'); // Get raw text
-        const imgSrc = element.getAttribute('data-img');
+    window.openProject = function (box) {
+        const d = box.dataset;
 
-        // Split the raw string by newline character to process line by line
-        const lines = rawDesc.split('\n');
-        let finalHtml = '';
-        let isListOpen = false;
+        document.getElementById('modal-title').textContent = d.title;
+        document.getElementById('modal-summary').textContent = d.summary;
+        document.getElementById('modal-points').replaceChildren(
+            ...d.points.split('|').map(t => el('li', t.trim()))
+        );
+        document.getElementById('modal-tags').replaceChildren(
+            ...d.tags.split('|').map(t => el('span', t.trim()))
+        );
+        document.getElementById('modal-gallery').replaceChildren(
+            ...d.gallery.split('|').map(item => {
+                const [src, caption] = item.split('::');
+                const fig = document.createElement('figure');
+                const img = new Image();
+                img.src = src.trim();
+                img.alt = caption || d.title;
+                img.onerror = () => fig.remove(); // skip missing images
+                fig.append(img);
+                if (caption) fig.append(el('figcaption', caption.trim()));
+                return fig;
+            })
+        );
 
-        lines.forEach(line => {
-            const trimmedLine = line.trim();
-
-            // 1. Check for a list item (must start with hyphen followed by a space)
-            if (trimmedLine.startsWith('- ')) {
-                if (!isListOpen) {
-                    // Start the list if one isn't open
-                    finalHtml += '<ul>';
-                    isListOpen = true;
-                }
-                // Add the list item (remove the '- ')
-                const listItemContent = trimmedLine.substring(2).trim();
-                finalHtml += `<li>${listItemContent}</li>`;
-
-            // 2. Otherwise, treat as a paragraph or a blank line
-            } else {
-                if (isListOpen) {
-                    // If a list was open, close it before inserting paragraph content
-                    finalHtml += '</ul>';
-                    isListOpen = false;
-                }
-
-                // Treat non-empty lines as paragraphs
-                if (trimmedLine.length > 0) {
-                    finalHtml += `<p>${trimmedLine}</p>`;
-                }
-                // Blank lines (trimmedLine.length === 0) are ignored.
-            }
-        });
-
-        // 3. Close any open list at the very end
-        if (isListOpen) {
-            finalHtml += '</ul>';
-        }
-
-        // 4. Insert content into the modal
-        document.getElementById('modal-title').innerText = title;
-        
-        // CRITICAL: Use innerHTML to render the converted tags!
-        document.getElementById('modal-desc').innerHTML = finalHtml;
-        
-        document.getElementById('modal-img').src = imgSrc;
-
+        projectModal.querySelector('.modal-content').scrollTop = 0;
         projectModal.classList.remove('hidden');
     };
 });
