@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
 
@@ -46,13 +46,15 @@
       To show CAD work, add images to data-gallery, e.g.
         data-gallery="assets/images/590 Barrels.jpg::Barrel set|assets/images/590 section.png::Section view of the seed part interface"
       Missing images are skipped automatically.
-      Preview crop: --zoom and --focus on the <img> control what the carousel thumbnail shows.
+      Preview crop (mobile only): --zoom and --focus on the <img> control what the carousel thumbnail shows.
+      data-fit="screen" scales that project's modal images to fit the screen instead of the modal width.
     -->
     <main id="carousel-container">
         <div class="carousel-track">
 
             <article class="project-card narrow-item" data-year="2025">
                 <div class="image-box" onclick="openProject(this)"
+                     data-fit="screen"
                      data-title="Airwrap Conical Curling Barrel"
                      data-summary="A material swap that saves $2 per unit on one of the highest volume Airwrap attachments, with no loss in performance."
                      data-points="Reworked the 3D CAD and 2D drawings to hold fit and function with the new material|Set specs from capability analysis of test data|Built an inline test jig that cut yield loss on the line"
@@ -79,6 +81,7 @@
 
             <article class="project-card narrow-item" data-year="2022">
                 <div class="image-box" onclick="openProject(this)"
+                     data-fit="screen"
                      data-title="Airwrap Large Round Volumizing Brush"
                      data-summary="A bigger diameter for users who wanted more volume. Internals and air paths re-engineered for Dyson's fastest new product launch at the time."
                      data-points="Owned the Cool Tip end to end in CAD, balancing thermal and structural limits with the ID requirements|Reworked the internal structure and air paths for the larger brush|Led design verification with rapid prototypes and root cause analysis to close failure modes before mass production"
@@ -128,6 +131,6 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="script.js?v=3"></script>
 </body>
 </html>

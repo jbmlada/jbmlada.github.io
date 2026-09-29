@@ -4,15 +4,60 @@ document.addEventListener('DOMContentLoaded', () => {
     const isMobile = () => window.innerWidth <= 768;
 
     // --- 1. Mouse wheel / trackpad scrolls the carousel sideways (desktop only) ---
-    // Mobile uses native touch scrolling with CSS scroll-snap. The old custom touch
-    // handler is removed: it added to scrollLeft on top of the browser's own scrolling,
-    // which doubled the movement and fought the momentum.
     container.addEventListener('wheel', (e) => {
         if (isMobile()) return;
         e.preventDefault();
         const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
         container.scrollLeft += delta * (e.deltaMode === 1 ? 32 : 1);
     }, { passive: false });
+
+    // --- 1b. Touch scroll with momentum (mobile) ---
+    let touchLastX = 0;
+    let touchLastTime = 0;
+    let velocity = 0;
+    let momentumRAF = null;
+
+    container.addEventListener('touchstart', (evt) => {
+        touchLastX = evt.touches[0].clientX;
+        touchLastTime = Date.now();
+        velocity = 0;
+        if (momentumRAF) {
+            cancelAnimationFrame(momentumRAF);
+            momentumRAF = null;
+        }
+    }, { passive: true });
+
+    container.addEventListener('touchmove', (evt) => {
+        const now = Date.now();
+        const x = evt.touches[0].clientX;
+        const dx = touchLastX - x;        // positive = scrolling right
+        const dt = now - touchLastTime || 1;
+
+        // Exponentially smooth velocity (px/ms)
+        const instantV = dx / dt;
+        velocity = velocity * 0.6 + instantV * 0.4;
+
+        container.scrollLeft += dx;
+        touchLastX = x;
+        touchLastTime = now;
+    }, { passive: true });
+
+    container.addEventListener('touchend', () => {
+        const FRICTION = 0.92;     // multiplied each frame; higher = glides longer
+        const MIN_VELOCITY = 0.08; // px/ms threshold to stop the animation
+
+        function momentum() {
+            if (Math.abs(velocity) < MIN_VELOCITY) {
+                velocity = 0;
+                return;
+            }
+            container.scrollLeft += velocity * 16; // ~16ms per frame at 60fps
+            velocity *= FRICTION;
+            momentumRAF = requestAnimationFrame(momentum);
+        }
+
+        momentumRAF = requestAnimationFrame(momentum);
+    }, { passive: true });
 
     // --- 2. Year display follows the card closest to center ---
     const yearDisplay = document.getElementById('year-display');
@@ -84,6 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('modal-tags').replaceChildren(
             ...d.tags.split('|').map(t => el('span', t.trim()))
         );
+        document.getElementById('modal-gallery').classList.toggle('fit', d.fit === 'screen');
         document.getElementById('modal-gallery').replaceChildren(
             ...d.gallery.split('|').map(item => {
                 const [src, caption] = item.split('::');
